@@ -61,14 +61,16 @@ func main() {
 			}
 		}()
 
-		var err error
-		db, err = sql.Open("mysql", *dbconn)
+		log.Printf("Opening database connection...")
+
+		db1, err := sql.Open("mysql", *dbconn)
 		if err != nil {
 			return err
 		}
-		defer db.Close()
 
-		_, err = db.Exec(`CREATE TABLE IF NOT EXISTS testm_counter (
+		log.Printf("Creating table...")
+
+		_, err = db1.Exec(`CREATE TABLE IF NOT EXISTS testm_counter (
 			k VARCHAR(255) NOT NULL,
 			c INT NOT NULL,
 			PRIMARY KEY (k)
@@ -76,6 +78,10 @@ func main() {
 		if err != nil {
 			return err
 		}
+
+		log.Printf("Database connection and setup done!")
+
+		db = db1
 		return nil
 	})
 
